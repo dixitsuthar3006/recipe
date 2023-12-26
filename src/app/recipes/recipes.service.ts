@@ -8,8 +8,8 @@ import { ShoppingListService } from "../shopping-list/shopping-list.service";
 })
 
 export class RecipeService {
-    selectedRecipe = new EventEmitter<Recipe>();
     recipeToSL = new EventEmitter<Ingredient[]>();
+    recipeChanged = new EventEmitter<Recipe[]>();
 
     constructor(private SlService: ShoppingListService){}
 
@@ -34,8 +34,17 @@ export class RecipeService {
         return this.recipes.slice();
     }
 
+    getRecipe(index:number){
+        return this.recipes[index];
+    }
+
     addIngredientsToSL(ingredients: Ingredient[]) {
         this.SlService.addIngredientsFromRecipe(ingredients);
+    }
+
+    delRecipe(index:number) {
+        this.recipes.splice(index,1);
+        this.recipeChanged.emit(this.recipes);
     }
 
 }
